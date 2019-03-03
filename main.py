@@ -1,9 +1,3 @@
-############################
-# Copyright IhsanGames     #
-# Author        : Ihsan    #
-# Created when  : Unknown  #
-# Created using : Python 3 #
-############################
 
 import os
 import sys
