@@ -1,4 +1,3 @@
-
 import os
 import sys
 import time
@@ -19,9 +18,12 @@ posMusuh = []
 posListrik = []
 posCelah = []
 posDinamitAmbil = []
+posDinamit = []
 dinamitInt = 0
 lazerInt = 100
 waktuMusuhBeraksi = 0
+dbg_mode = False
+dbg_enabled = False
 # ----- Start FPS Counter -----
 FPS = int()
 FPScount = int()
@@ -51,7 +53,6 @@ def musuhAktif(pM):   # AI Musuh v1
         posYangDilihatAtas = []
 
         # AI ------------------------
-        #   [ Demonstrasi -----------
 
         # 1 |#OO#OOOO##|
         # 2 |#OOOOOO## |
@@ -185,104 +186,125 @@ def musuhAktif(pM):   # AI Musuh v1
                         a[1] += 1
                     else:
                         while True:
-                            b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
-                            if b == 1:
-                                if not a[0] == 0:
-                                    if map[a[0] - 1][a[1]] != "#":
-                                        a[0] -= 1
-                                        break
-                                    else: break
+                            try:
+                                b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
+                                if b == 1:
+                                    if not a[0] == 0:
+                                        if map[a[0] - 1][a[1]] != "#":
+                                            a[0] -= 1
+                                            break
+                                        else: break
 
-                            elif b == 2:
-                                if not a[0] == 24:
-                                    if map[a[0] + 1][a[1]] != "#":
-                                        a[0] += 1
-                                        break
+                                elif b == 2:
+                                    if not a[0] == 24:
+                                        if map[a[0] + 1][a[1]] != "#":
+                                            a[0] += 1
+                                            break
 
-                            elif b == 3:
-                                if not a[1] == 119:
-                                    if map[a[0]][a[1] + 1] != "#":
-                                        a[1] += 1
-                                        break
-                                    else: break
+                                elif b == 3:
+                                    if not a[1] == 119:
+                                        if map[a[0]][a[1] + 1] != "#":
+                                            a[1] += 1
+                                            break
+                                        else: break
 
-                            elif b == 4:
-                                if not a[1] == 0:
-                                    if map[a[0]][a[1] - 1] != "#":
-                                        a[1] -= 1
-                                        break
-                                    else: break
+                                elif b == 4:
+                                    if not a[1] == 0:
+                                        if map[a[0]][a[1] - 1] != "#":
+                                            a[1] -= 1
+                                            break
+                                        else: break
+                            except:
+                                pass
+                            else:
+                                break
                 else:
                     if random.randint(0, 2) == 1 and len(posYangDilihatAtas) >= len(posYangDilihatBawah) and a[0] != 0 and map[a[0]-1][a[1]]!= "#":
                         a[1] -= 1
                     else:
                         while True:
-                            b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
-                            if b == 1:
-                                if not a[0] == 0:
-                                    if map[a[0] - 1][a[1]] != "#":
-                                        a[0] -= 1
-                                        break
-                                    else: break
+                            try:
+                                b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
+                                if b == 1:
+                                    if not a[0] == 0:
+                                        if map[a[0] - 1][a[1]] != "#":
+                                            a[0] -= 1
+                                            break
+                                        else: break
 
-                            elif b == 2:
-                                if not a[0] == 24:
-                                    if map[a[0] + 1][a[1]] != "#":
-                                        a[0] += 1
-                                        break
+                                elif b == 2:
+                                    if not a[0] == 24:
+                                        if map[a[0] + 1][a[1]] != "#":
+                                            a[0] += 1
+                                            break
 
-                            elif b == 3:
-                                if not a[1] == 119:
-                                    if map[a[0]][a[1] + 1] != "#":
-                                        a[1] += 1
-                                        break
-                                    else: break
+                                elif b == 3:
+                                    if not a[1] == 119:
+                                        if map[a[0]][a[1] + 1] != "#":
+                                            a[1] += 1
+                                            break
+                                        else: break
 
-                            elif b == 4:
-                                if not a[1] == 0:
-                                    if map[a[0]][a[1] - 1] != "#":
-                                        a[1] -= 1
-                                        break
-                                    else: break
+                                elif b == 4:
+                                    if not a[1] == 0:
+                                        if map[a[0]][a[1] - 1] != "#":
+                                            a[1] -= 1
+                                            break
+                                        else: break
+                            except:
+                                pass
+                            else:
+                                break
 
             else:  # Scr random, akan jadi random
                 while True:
-                    b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
-                    if b == 1:
-                        if not a[0] == 0:
-                            if map[a[0] - 1][a[1]] != "#":
-                                a[0] -= 1
-                                break
-                            else: break
+                    try:
+                        b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
+                        if b == 1:
+                            if not a[0] == 0:
+                                if map[a[0] - 1][a[1]] != "#":
+                                    a[0] -= 1
+                                    break
+                                else: break
 
-                    elif b == 2:
-                        if not a[0] == 24:
-                            if map[a[0] + 1][a[1]] != "#":
-                                a[0] += 1
-                                break
+                        elif b == 2:
+                            if not a[0] == 24 and a[0] != 0:
+                                if map[a[0] + 1][a[1]] != "#":
+                                    a[0] += 1
+                                    break
 
-                    elif b == 3:
-                        if not a[1] == 119:
-                            if map[a[0]][a[1] + 1] != "#":
-                                a[1] += 1
-                                break
-                            else: break
+                        elif b == 3:
+                            if a[1] != 119 and a[1] != 0:
+                                if map[a[0]][a[1] + 1] != "#":
+                                    a[1] += 1
+                                    break
+                                else: break
 
-                    elif b == 4:
-                        if not a[1] == 0:
-                            if map[a[0]][a[1] - 1] != "#":
-                                a[1] -= 1
-                                break
-                            else: break
+                        elif b == 4:
+                            if not a[1] == 0:
+                                if map[a[0]][a[1] - 1] != "#":
+                                    a[1] -= 1
+                                    break
+                                else: break
+                    except:
+                        pass
+                    else:
+                        break
 
-        if a[0] != 25 and a[1] != 120:
-            if map[a[0]][a[1]] == "o":
-                map[a[0]][a[1]] = " "
-                pM.remove(a)
+        if a[0] <= 25 and a[1] <= 120:
+            try:
+                if map[a[0]][a[1]] == "o":
+                    map[a[0]][a[1]] = " "
+                    pM.remove(a)
+            except:
+                pass
 
-        map[a[2]][a[3]] = " "
-        map[a[0]][a[1]] = " "
-        map[a[0]][a[1]] = "M"
+        if a[0] != 24 and a[1] != 119:
+            map[a[2]][a[3]] = " "
+
+        if not a[0] >= 25:
+            map[a[0]][a[1]] = " "
+            map[a[0]][a[1]] = "M"
         a[2] = a[0]
         a[3] = a[1]
 
@@ -297,7 +319,7 @@ def bindPlayer(x, y, xo, yo):
     return [xo, yo]
 
 
-def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit):
+def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
 
     # Pergerakan Player
 
@@ -427,19 +449,43 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit):
         if not dinamit == 0 and not dinamit < 0:
             if map[PlocY - 1][PlocX] == " ":
                 dinamit -= 1
-                map[PlocY -1][PlocX] = "o"
+                map[PlocY - 1][PlocX] = "o"
+                posDinamit.append([PlocY - 1, PlocX])
+
+            elif map[PlocY - 1][PlocX - 1] == " ":
+                dinamit -= 1
+                map[PlocY - 1][PlocX - 1] = "o"
+                posDinamit.append([PlocY - 1, PlocX - 1])
 
             elif map[PlocY + 1][PlocX] == " ":
                 dinamit -= 1
                 map[PlocY + 1][PlocX] = "o"
+                posDinamit.append([PlocY + 1, PlocX])
+
+            elif map[PlocY + 1][PlocX + 1] == " ":
+                dinamit -= 1
+                map[PlocY + 1][PlocX + 1] = "o"
+                posDinamit.append([PlocY + 1, PlocX + 1])
 
             elif map[PlocY][PlocX - 1] == " ":
                 dinamit -= 1
                 map[PlocY][PlocX - 1] = "o"
+                posDinamit.append([PlocY, PlocX - 1])
+
+            elif map[PlocY + 1][PlocX - 1] == " ":
+                dinamit -= 1
+                map[PlocY][PlocX] = "o"
+                posDinamit.append([PlocY, PlocX])
 
             elif map[PlocY][PlocX + 1] == " ":
                 dinamit -= 1
                 map[PlocY][PlocX + 1] = "o"
+                posDinamit.append([PlocY, PlocX + 1])
+
+            elif map[PlocY - 1][PlocX + 1] == " ":
+                dinamit -= 1
+                map[PlocY - 1][PlocX + 1] = "o"
+                posDinamit.append([PlocY - 1, PlocX + 1])
     
     for a in posListrik:
         
@@ -450,14 +496,14 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit):
                 lazerInt = 100
             posListrik.remove(a)
 
-    return [PlocY, PlocX, kalah, lazerInt, dinamit]
+    return [PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit]
 
 
 def draw():
     # Nge print seluruh isi dict map
     strtes = str()
     
-    for a in range(0, 25):
+    for a in range(0, 24):
         
         for b in range(0, 120):
             strtes += map[a][b]
@@ -485,7 +531,7 @@ def initialization(kem):
     map[1] = ltest
     lunit = []
     
-    for a in range(1, 25):
+    for a in range(1, 23):
         lunit.append("#")
         
         for b in range(0, 120):
@@ -513,6 +559,10 @@ def initialization(kem):
         map[a] = lunit
         lunit = []
 
+    for a in range(0, 120):
+        ltest.append("#")
+    map[23] = ltest
+
     for c in range(0, random.randint(20, 300)):
         if random.randint(1, kem) == random.randint(1, kem):
             a = random.randint(0, 24)
@@ -527,7 +577,7 @@ def initialization(kem):
             map[a][b] = "M"
             posMusuh.append([a, b, a, b])  # Y, X, Yold, Xold
     
-    for ghj in range(0, random.randint(0, 50)):
+    for ghj in range(0, random.randint(0, 100)):
         if random.randint(1, kem + 5) == random.randint(1, kem + 5):
             random1 = random.randint(0, 24)
             random2 = random.randint(0, 119)
@@ -543,16 +593,12 @@ def initialization(kem):
             posDinamitAmbil.append([random1, random2])
             # Display dinamit setelah di taruh : ǒ
 
-    map[0][0] = " "
-    map[1][0] = " "
-    map[1][1] = " "
-    map[0][1] = " "
-
 
 if __name__ == "__main__":
     # DEBUG MODE CHECKER
     try:
         if sys.argv[1] == "dbg_mode":
+            dbg_mode = True
             lazerInt = int(sys.argv[2])
             dinamitInt = int(sys.argv[3])
     except:
@@ -586,13 +632,14 @@ if __name__ == "__main__":
         print("X: " + str(PlocX) + " ,Y: " + str(PlocY))
         print("_" * 120)
 
-        lbj = cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamitInt)  # Ngecek klo player nge-klik WASD dll..
+        lbj = cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamitInt, posDinamit)  # Ngecek klo player nge-klik WASD dll..
 
         PlocY = lbj[0]  # Memasukkan var hasil return func cekKontrol ke variabel penting
         PlocX = lbj[1]
         kalah = lbj[2]
         lazerInt = lbj[3]
         dinamitInt = lbj[4]
+        posDinamit = lbj[5]
 
         # Sistem biar bisa keluar
         # Biasanya digunakan saat game nge-bug, atau keluar kesalahan.
@@ -650,13 +697,17 @@ if __name__ == "__main__":
         for a in posDinamitAmbil:
             if not map[a[0]][a[1]] == "M" or map[a[0]][a[1]] == "│" or map[a[0]][a[1]] == "─":
                 map[a[0]][a[1]] = "■"
+
+        for a in posDinamit:
+            if not map[a[0]][a[1]] == "│" or map[a[0]][a[1]] == "─" or map[a[0]][a[1]] == "─":
+                map[a[0]][a[1]] = "o"
             
         time.sleep(0.085)
 
         if os.name != "nt": os.system("clear")
         else: os.system("cls")
 
-        waktuDetikFPS = int(time.perf_counter())   # Menghitung berapa Frame per Detik (FPS)
+        waktuDetikFPS = int(time.time())   # Menghitung berapa Frame per Detik (FPS)
         if waktuDetikFPS == wdfl + 1:              # Udah kena delay, jadi.. bukan FPS asli..
             wdfl = waktuDetikFPS
             FPS = FPScount
@@ -664,6 +715,16 @@ if __name__ == "__main__":
         else:
             FPScount += 1
 
+
+        # Developer debug things
+        if dbg_mode:
+            if dbg_enabled:
+                print("posMusuh: "+ str(posMusuh) + "\nposDinamit: " + str(posDinamit) + "\nposDinamitAmbil: " + str(posDinamitAmbil) + "\nposListrik: " + str(posListrik))
+
+            if keyboard.is_pressed("x"):
+                dbg_enabled = True
+            elif keyboard.is_pressed("z"):
+                dbg_enabled = False
     if os.name != "nt": os.system("clear")
     else: os.system("cls")
 
