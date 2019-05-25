@@ -4,8 +4,6 @@ import time
 import keyboard
 import random
 
-# Menginiliasasi (XD) Variabel yg dibutuhkan
-
 map = dict()
 problema = str()
 PlocX = int()
