@@ -12,7 +12,7 @@ PlocYold = int()
 PlocXold = int()
 kalah = bool()
 tujuanPosTembak = [0, 0]
-posMusuh = []
+posMusuh = list()
 posListrik = []
 posCelah = []
 posDinamitAmbil = []
@@ -39,272 +39,45 @@ def pickupChecker(posDinamitAmbil, PlocY, PlocX, dinamit, posListrik):
     return [posDinamitAmbil, dinamit, posListrik]
 
 
-def musuhAktif(pM):   # AI Musuh v1
-    posYangDilihatKanan = []
-    posYangDilihatKiri = []
-    posYangDilihatBawah = []
-    posYangDilihatAtas = []
-    for a in pM:
-        posYangDilihatKanan = []
-        posYangDilihatKiri = []
-        posYangDilihatBawah = []
-        posYangDilihatAtas = []
+def musuhAktif(pM, pP):   # AI Musuh v2
+    print(pM)
+    # Mirip AI nya Pacman
+    # pM = Y-X-Yold-Xold-chaseMode   pP = Y-X-Yold-Xold
+    #for pM in pm:
+    if True:
+        print(pM)
+        target = []
+        up = []
+        down = []
+        right = []
+        left = []
+        if not pM[3] and random.randint(0, 5) == 3:
+            pM[3] = True
 
-        # AI ------------------------
+        if pM[3] and random.randint(0, 25) == 14:
+            pM[3] = False
 
-        # 1 |#OO#OOOO##|
-        # 2 |#OOOOOO## |
-        # 3 |  #OOM#  #|
-        # 4 |   #OO# # |
-        # 5 |### #O   #|
-        # 
+        if pM[3]:
         
-        try:
-        # Scan Kanan
-            for y in range(1, 4):  # Scan dari atas ke x musuh ( atas kanan )
-                # Scan dari point ke kanan (atas ke bawah)
-                for x in range(1, 6):
-                    if map[a[0] - (3 - y)][a[1] + x] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] - (3 - y), a[1] + x])
+            i = pM[0]+1
+            up = [i, pM[1]]
+
+            i = pM[0]-1
+            down = [i, pM[1]]
         
-            for y in range(1, 3):  # Scan dari xy-musuh ke y-2
-                for x in range(1, 6):
-                    if map[a[0] + y][a[1] + x] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] + y, a[1] + x])
-        except:
-            pass
+            i = pM[1]+1
+            right = [pM[0], i]
 
-
-        try:
-            # Scan Kiri
-            for y in range(1, 4):
-                for x in range(1, 6):
-                    if map[a[0] - (3 - y)][a[1] - x] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] - (3 - y), a[1] - x])
-    
-            for y in range(1, 3):
-                for x in range(1, 6):
-                    if map[a[0] + y][a[1] - x] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] + y, a[1] - x])
-        except:
-            pass
-
-        try:
-            # Scan Atas
-            for x in range(1, 6):
-                for y in range(1, 4):
-                    if map[a[0] + y][a[1] - (5 - x)] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] + y, a[1] - (5 - x)])
-
-            for x in range(1, 6):
-                for y in range(1, 3):
-                    if map[a[0] + y][a[1] + x] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] + y, a[1] + x])
-        except:
-            pass
-
-        try:
-            # Scan Bawah
-            for x in range(1, 6):
-                for y in range(1, 3):
-                    if map[a[0] - y][a[1] - (5 - x)] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] - y, a[1] - (5 - x)])
-
-            for x in range(1, 6):
-                for y in range(1, 3):
-                    if map[a[0] - y][a[1] + x] == "#" and random.randint(0,2) == random.randint(0,2):
-                        break
-                    else:
-                        posYangDilihatAtas.append([a[0] - y, a[1] + x])
-        except:
-            pass
-
-        # for y in range(0, 25):
-        #     for x in range(0, 120):
-        #         if map[y][x] == "O":
-        #             map[y][x] = " "
-
-        # Checking POS
-        for pos in posYangDilihatKanan:
-            #map[pos[0]][pos[1]] = "O"
-            if not pos in posYangDilihatAtas or not pos in posYangDilihatBawah:
-                posYangDilihatKanan.remove(pos)
-
-        for pos in posYangDilihatKiri:
-            #map[pos[0]][pos[1]] = "O"
-            if not pos in posYangDilihatAtas or not pos in posYangDilihatBawah:
-                posYangDilihatKiri.remove(pos)
-
-        for pos in posYangDilihatAtas:
-            #map[pos[0]][pos[1]] = "O"
-            if not pos in posYangDilihatKanan or not pos in posYangDilihatKiri:
-                posYangDilihatAtas.remove(pos)
-
-        for pos in posYangDilihatBawah:
-            #map[pos[0]][pos[1]] = "O"
-            if not pos in posYangDilihatKanan or not pos in posYangDilihatKiri:
-                posYangDilihatBawah.remove(pos)
-
-        posSemua = posYangDilihatKanan + posYangDilihatBawah + posYangDilihatKiri + posYangDilihatAtas
-
-        # Menentukan Arah
-        for p in posSemua:
-            if p[0] == PlocY and p[1] == PlocX:
-                if p in posYangDilihatKanan:
-                    a[1] += 1
-                    break
-                elif p in posYangDilihatKiri:
-                    a[1] -= 1
-                    break
-                elif p in posYangDilihatAtas:
-                    a[0] += 1
-                    break
-                elif p in posYangDilihatBawah:
-                    a[0] -= 1
-                    break
-        if a[0] == a[2] and a[1] == a[3]:
-            if random.randint(0, 5) == 2:
-                if random.randint(0, 2) == 1 and (len(posYangDilihatKanan) + len(posYangDilihatKiri)) > (len(posYangDilihatAtas) + len(posYangDilihatBawah)):
-                    # Kanan Kiri
-                    if random.randint(0, 2) == 1 and len(posYangDilihatKanan) >= len(posYangDilihatKanan) and a[1] != 119 and map[a[0]][a[1]+1]!= "#":
-                        a[1] += 1
-                    else:
-                        while True:
-                            try:
-                                b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
-                                if b == 1:
-                                    if not a[0] == 0:
-                                        if map[a[0] - 1][a[1]] != "#":
-                                            a[0] -= 1
-                                            break
-                                        else: break
-
-                                elif b == 2:
-                                    if not a[0] == 24:
-                                        if map[a[0] + 1][a[1]] != "#":
-                                            a[0] += 1
-                                            break
-
-                                elif b == 3:
-                                    if not a[1] == 119:
-                                        if map[a[0]][a[1] + 1] != "#":
-                                            a[1] += 1
-                                            break
-                                        else: break
-
-                                elif b == 4:
-                                    if not a[1] == 0:
-                                        if map[a[0]][a[1] - 1] != "#":
-                                            a[1] -= 1
-                                            break
-                                        else: break
-                            except:
-                                pass
-                            else:
-                                break
-                else:
-                    if random.randint(0, 2) == 1 and len(posYangDilihatAtas) >= len(posYangDilihatBawah) and a[0] != 0 and map[a[0]-1][a[1]]!= "#":
-                        a[1] -= 1
-                    else:
-                        while True:
-                            try:
-                                b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
-                                if b == 1:
-                                    if not a[0] == 0:
-                                        if map[a[0] - 1][a[1]] != "#":
-                                            a[0] -= 1
-                                            break
-                                        else: break
-
-                                elif b == 2:
-                                    if not a[0] == 24:
-                                        if map[a[0] + 1][a[1]] != "#":
-                                            a[0] += 1
-                                            break
-
-                                elif b == 3:
-                                    if not a[1] == 119:
-                                        if map[a[0]][a[1] + 1] != "#":
-                                            a[1] += 1
-                                            break
-                                        else: break
-
-                                elif b == 4:
-                                    if not a[1] == 0:
-                                        if map[a[0]][a[1] - 1] != "#":
-                                            a[1] -= 1
-                                            break
-                                        else: break
-                            except:
-                                pass
-                            else:
-                                break
-
-            else:  # Scr random, akan jadi random
-                while True:
-                    try:
-                        b = random.randint(1, 4)  # Atas, Bawah, Kanan, Kiri
-                        if b == 1:
-                            if not a[0] == 0:
-                                if map[a[0] - 1][a[1]] != "#":
-                                    a[0] -= 1
-                                    break
-                                else: break
-
-                        elif b == 2:
-                            if not a[0] == 24 and a[0] != 0:
-                                if map[a[0] + 1][a[1]] != "#":
-                                    a[0] += 1
-                                    break
-
-                        elif b == 3:
-                            if a[1] != 119 and a[1] != 0:
-                                if map[a[0]][a[1] + 1] != "#":
-                                    a[1] += 1
-                                    break
-                                else: break
-
-                        elif b == 4:
-                            if not a[1] == 0:
-                                if map[a[0]][a[1] - 1] != "#":
-                                    a[1] -= 1
-                                    break
-                                else: break
-                    except:
-                        pass
-                    else:
-                        break
-
-        if a[0] <= 25 and a[1] <= 120:
-            try:
-                if map[a[0]][a[1]] == "o":
-                    map[a[0]][a[1]] = " "
-                    pM.remove(a)
-            except:
-                pass
-
-        if a[0] != 24 and a[1] != 119:
-            map[a[2]][a[3]] = " "
-
-        if not a[0] >= 25:
-            map[a[0]][a[1]] = " "
-            map[a[0]][a[1]] = "M"
-        a[2] = a[0]
-        a[3] = a[1]
+            i = pM[1]-1
+            left = [pM[0], i]
+        
+            preds = [abs(up[0] - pP[0]) + abs(up[1] - pP[1]),
+                    abs(down[0] - pP[0]) + abs(up[1] - pP[1]),
+                    abs(right[0] - pP[0]) + abs(right[1] - pP[1]),
+                    abs(left[0] - pP[0]) + abs(left[1] - pP[1])]
+        
+            preds = preds.sort()
+            print(preds)
 
     return pM
 
@@ -529,7 +302,7 @@ def initialization(kem):
     map[1] = ltest
     lunit = []
     
-    for a in range(1, 23):
+    for a in range(0, 25):
         lunit.append("#")
         
         for b in range(0, 120):
@@ -566,14 +339,17 @@ def initialization(kem):
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
-            posMusuh.append([a, b, a, b])  # Y, X, Yold, Xold
+            posMusuh.append([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
 
-    if len(posMusuh) == 0:
+    print("==OI")
+    if True:
+        print("YEHA")
         for c in range(0, random.randint(kem-int(kem/2), kem+5)):
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
-            posMusuh.append([a, b, a, b])  # Y, X, Yold, Xold
+            posMusuh.append([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
+        print(posMusuh)
     
     for ghj in range(0, random.randint(0, 100)):
         if random.randint(1, kem + 5) == random.randint(1, kem + 5):
@@ -620,8 +396,14 @@ if __name__ == "__main__":
             exit()
         else:
             initialization(kemungkinan)
+
+    print(posMusuh)
+
+    time.sleep(10)
     waktuDetikFPS = int(time.perf_counter())
+    print(posMusuh)
     while True:
+        print(posMusuh)
 
         # Print Bar
         print("\n                                                   The Lazer Soldier\n" +
@@ -645,7 +427,7 @@ if __name__ == "__main__":
             os.system("cls")
             exit()
 
-        posMusuh = musuhAktif(posMusuh) # Buat Musuh bisa bergerak (scr random)
+        posMusuh = musuhAktif(posMusuh, [PlocX, PlocY]) # Buat Musuh bisa bergerak (AI)
 
         a = bindPlayer(PlocX, PlocY, PlocXold, PlocYold)  # Ngeposisikan Player ke tempat yang sudah di
         PlocXold = a[0]                                   # atur pada function cekKontrol()
@@ -702,8 +484,8 @@ if __name__ == "__main__":
             
         time.sleep(0.085)
 
-        if os.name != "nt": os.system("clear")
-        else: os.system("cls")
+        # if os.name != "nt": os.system("clear")
+        # else: os.system("cls")
 
         waktuDetikFPS = int(time.time())   # Menghitung berapa Frame per Detik (FPS)
         if waktuDetikFPS == wdfl + 1:              # Udah kena delay, jadi.. bukan FPS asli..
