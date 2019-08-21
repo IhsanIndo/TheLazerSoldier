@@ -12,7 +12,6 @@ PlocYold = int()
 PlocXold = int()
 kalah = bool()
 tujuanPosTembak = [0, 0]
-posMusuh = list()
 posListrik = []
 posCelah = []
 posDinamitAmbil = []
@@ -38,49 +37,84 @@ def pickupChecker(posDinamitAmbil, PlocY, PlocX, dinamit, posListrik):
 
     return [posDinamitAmbil, dinamit, posListrik]
 
-
+'''
 def musuhAktif(pM, pP):   # AI Musuh v2
     print(pM)
     # Mirip AI nya Pacman
     # pM = Y-X-Yold-Xold-chaseMode   pP = Y-X-Yold-Xold
-    #for pM in pm:
-    if True:
-        print(pM)
-        target = []
-        up = []
-        down = []
-        right = []
-        left = []
-        if not pM[3] and random.randint(0, 5) == 3:
-            pM[3] = True
+    for posm in pM:
+    #if True:
+            return posm
+'''
 
-        if pM[3] and random.randint(0, 25) == 14:
-            pM[3] = False
+class Musuh:
+    datas = []
 
-        if pM[3]:
+    def __init__(self):
+        pass
+
+    def add(self, posY, posX): # Y X Yold Xold chaseMode
+        self.datas.append([posY, posX, posY, posX, False])
+
+    def kill(self, pos):
+        self.datas.remove(pos)
+
+    def active(self, view):
+        pnum = 0
+        for pM in self.datas:
+
+            print(posm)
+            target = []
+            up = []
+            down = []
+            right = []
+            left = []
+            print(posm)
+            if not posm[3] and random.randint(0, 5) == 3:
+                posm[3] = True
+            if posm[3] and random.randint(0, 25) == 14:
+                posm[3] = False
+            if posm[3]:
+            
+                print(posm)
+
+                i = posm[0]+1
+                up = [i, posm[1]]
+
+                i = posm[0]-1
+                down = [i, posm[1]]
+
+                i = posm[1]+1
+                right = [posm[0], i]
+
+                i = posm[1]-1
+                left = [posm[0], i]
+                
+                direction = [up, down, right, left]
+
+                preds = [
+                            [abs(up[0] - pP[0]) + abs(up[1] - pP[1]),       0]  ,
+                            [abs(down[0] - pP[0]) + abs(up[1] - pP[1]),     1]  ,
+                            [abs(right[0] - pP[0]) + abs(right[1] - pP[1]), 2]  ,
+                            [abs(left[0] - pP[0]) + abs(left[1] - pP[1]),   3]
+                        ]
         
-            i = pM[0]+1
-            up = [i, pM[1]]
+                preds = preds.sort()
+                num = 10
+                for pred in preds:
+                    for a in range(0, 4):
+                        num = a
+                        if view[direction[a][1]][direction[a][0]] != "#":
+                            break
+                    if num != 10:
+                        self.datas[pnum] = [direction[num][0],
+                                            direction[num][0] ]
+                
+                if not pM[4]:
+                    pass
 
-            i = pM[0]-1
-            down = [i, pM[1]]
-        
-            i = pM[1]+1
-            right = [pM[0], i]
-
-            i = pM[1]-1
-            left = [pM[0], i]
-        
-            preds = [abs(up[0] - pP[0]) + abs(up[1] - pP[1]),
-                    abs(down[0] - pP[0]) + abs(up[1] - pP[1]),
-                    abs(right[0] - pP[0]) + abs(right[1] - pP[1]),
-                    abs(left[0] - pP[0]) + abs(left[1] - pP[1])]
-        
-            preds = preds.sort()
-            print(preds)
-
-    return pM
-
+                pnum += 1
+musuh = Musuh()
 
 def bindPlayer(x, y, xo, yo):
     map[yo][xo] = " "
@@ -339,17 +373,18 @@ def initialization(kem):
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
-            posMusuh.append([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
+            musuh.add([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
 
     print("==OI")
     if True:
         print("YEHA")
-        for c in range(0, random.randint(kem-int(kem/2), kem+5)):
+        for c in range(0, random.randint(kem-int(kem/2), kem+3)):
+            print("loop", c)
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
-            posMusuh.append([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
-        print(posMusuh)
+            musuh.add([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
+        print(musuh.datas)
     
     for ghj in range(0, random.randint(0, 100)):
         if random.randint(1, kem + 5) == random.randint(1, kem + 5):
@@ -397,13 +432,13 @@ if __name__ == "__main__":
         else:
             initialization(kemungkinan)
 
-    print(posMusuh)
+    print(musuh.datas)
 
     time.sleep(10)
     waktuDetikFPS = int(time.perf_counter())
     print(posMusuh)
     while True:
-        print(posMusuh)
+        print(musuh.datas)
 
         # Print Bar
         print("\n                                                   The Lazer Soldier\n" +
@@ -427,7 +462,7 @@ if __name__ == "__main__":
             os.system("cls")
             exit()
 
-        posMusuh = musuhAktif(posMusuh, [PlocX, PlocY]) # Buat Musuh bisa bergerak (AI)
+        musuh.active() # Buat Musuh bisa bergerak (AI)
 
         a = bindPlayer(PlocX, PlocY, PlocXold, PlocYold)  # Ngeposisikan Player ke tempat yang sudah di
         PlocXold = a[0]                                   # atur pada function cekKontrol()
