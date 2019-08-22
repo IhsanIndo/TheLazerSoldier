@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-import keyboard
+#import keyboard
 import random
 
 map = dict()
@@ -28,6 +28,10 @@ waktuDetikFPS = int()
 wdfl = int()
 # -----  End FPS Counter  -----
 
+
+class keyboard:
+    def is_pressed(self):
+        return False
 
 def pickupChecker(posDinamitAmbil, PlocY, PlocX, dinamit, posListrik):
     for a in posDinamitAmbil:
@@ -107,13 +111,26 @@ class Musuh:
                         if view[direction[a][1]][direction[a][0]] != "#":
                             break
                     if num != 10:
-                        self.datas[pnum] = [direction[num][0],
-                                            direction[num][0] ]
+                        self.datas[pnum] = [direction[num][0]   ,
+                                            direction[num][0]   ,
+                                            self.datas[2]       ,
+                                            self.datas[3]       ,
+                                            True                ]
                 
-                if not pM[4]:
-                    pass
+                # Y X Yold Xold chaseMode
 
                 pnum += 1
+
+    def bind(self, view):
+        num = 0
+        for pM in self.datas:
+            view[pM[0]][pM[1]] = "M"
+            view[pM[2]][pM[3]] = " "
+            self.datas[num][2] = pM[0]
+            self.datas[num][3] = pM[1]
+            num += 1
+        return view
+
 musuh = Musuh()
 
 def bindPlayer(x, y, xo, yo):
@@ -170,7 +187,7 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
                     tujuanPosTembak[1] = PlocY
                     break
                 elif map[PlocY][a] == "M":
-                    posMusuh.remove([PlocY, a, PlocY, a])
+                    musuh.kill([PlocY, a, PlocY, a])
                     map[PlocY][a] = " "
                     tujuanPosTembak[0] = a - 1
                     tujuanPosTembak[1] = PlocY
@@ -190,7 +207,7 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
                     tujuanPosTembak[1] = PlocY
                     break
                 elif map[PlocY][a] == "M":
-                    posMusuh.remove([PlocY, a, PlocY, a])
+                    musuh.kill([PlocY, a, PlocY, a])
                     map[PlocY][a] = " "
                     tujuanPosTembak[0] = a + 1
                     tujuanPosTembak[1] = PlocY
@@ -215,7 +232,7 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
                     break
                 
                 elif map[a][PlocX] == "M":
-                    posMusuh.remove([a, PlocX, a, PlocX])
+                    musuh.kill([a, PlocX, a, PlocX])
                     map[a][PlocX] = " "
                     tujuanPosTembak[0] = PlocX
                     tujuanPosTembak[1] = a + 1
@@ -240,7 +257,7 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
                     break
                 
                 elif map[a][PlocX] == "M":
-                    posMusuh.remove([a, PlocX, a, PlocX])
+                    musuh.kill([a, PlocX, a, PlocX])
                     map[a][PlocX] = " "
                     tujuanPosTembak[0] = PlocX
                     tujuanPosTembak[1] = a - 1
@@ -373,7 +390,7 @@ def initialization(kem):
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
-            musuh.add([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
+            musuh.add(a, b, a, b, False)  # Y, X, Yold, Xold, chaseMode
 
     print("==OI")
     if True:
@@ -383,7 +400,7 @@ def initialization(kem):
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
-            musuh.add([a, b, a, b, False])  # Y, X, Yold, Xold, chaseMode
+            musuh.add(a, b, a, b, False)  # Y, X, Yold, Xold, chaseMode
         print(musuh.datas)
     
     for ghj in range(0, random.randint(0, 100)):
@@ -436,7 +453,6 @@ if __name__ == "__main__":
 
     time.sleep(10)
     waktuDetikFPS = int(time.perf_counter())
-    print(posMusuh)
     while True:
         print(musuh.datas)
 
@@ -463,6 +479,7 @@ if __name__ == "__main__":
             exit()
 
         musuh.active() # Buat Musuh bisa bergerak (AI)
+        musuh.bind() # Bind Musuh ke map
 
         a = bindPlayer(PlocX, PlocY, PlocXold, PlocYold)  # Ngeposisikan Player ke tempat yang sudah di
         PlocXold = a[0]                                   # atur pada function cekKontrol()
