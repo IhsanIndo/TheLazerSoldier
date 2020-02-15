@@ -65,14 +65,27 @@ class Musuh:
 
             # Set random directions for enemy
             rand = random.randint(0, 4)
-            if rand == 0 and (pM[0]+1) <= 24:
+            # Y kebawah
+            if rand == 0 and (pM[0]+1) != 24:
                 pM[0] += 1
-            if rand == 1 and (pM[0]-1) >= 1:
+
+            # Y keatas
+            if rand == 1 and (pM[0]-1) >= 0:
                 pM[0] -= 1
-            if rand == 2 and (pM[1]+1) <= 119:
+
+            # X kekanan
+            if rand == 2 and (pM[1]+1) != 119:
                 pM[1] += 1
-            if rand == 3 and (pM[1]-1) >= 1:
+
+            # X kekiri
+            if rand == 3 and (pM[1]-1) >= 0:
                 pM[0] -= 1
+
+            if pM[0] == 0 or pM[0] == -1:
+                pM[0] = 1
+
+            if pM[1] == 0 or pM[1] == -1:
+                pM[1] = 1
 
             # set new values into datas
             self.datas[pnum] = pM
@@ -92,7 +105,6 @@ class Musuh:
 musuh = Musuh()
 
 
-
 def bindPlayer(x, y, xo, yo):
     map[yo][xo] = " "
     map[y][x] = "@"
@@ -101,7 +113,7 @@ def bindPlayer(x, y, xo, yo):
     return [xo, yo]
 
 
-def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
+def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit, musuh):
 
     # Pergerakan Player
 
@@ -278,7 +290,7 @@ def cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit):
                 lazerInt = 100
             posListrik.remove(a)
 
-    return [PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit]
+    return [PlocY, PlocX, kalah, lazerInt, dinamit, posDinamit, musuh]
 
 
 def draw():
@@ -341,22 +353,21 @@ def initialization(kem):
         map[a] = lunit
         lunit = []
 
+    map[0][1] = ""
+
     for a in range(0, 120):
         ltest.append("#")
     map[23] = ltest
 
     for c in range(0, random.randint(20, 300)):
         if random.randint(1, kem) == random.randint(1, kem):
-            a = random.randint(0, 24)
-            b = random.randint(0, 119)
+            a = random.randint(2, 23)
+            b = random.randint(2, 118)
             map[a][b] = "M"
             musuh.add(a, b, a, b, False)  # Y, X, Yold, Xold, chaseMode
 
-    print("==OI")
     if True:
-        print("YEHA")
         for c in range(0, random.randint(kem-int(kem/2), kem+3)):
-            print("loop", c)
             a = random.randint(0, 24)
             b = random.randint(0, 119)
             map[a][b] = "M"
@@ -409,12 +420,9 @@ if __name__ == "__main__":
         else:
             initialization(kemungkinan)
 
-    print(musuh.datas)
 
-    time.sleep(10)
     waktuDetikFPS = int(time.perf_counter())
     while True:
-        print(musuh.datas)
 
         # Print Bar
         print("\n                                                   The Lazer Soldier\n" +
@@ -423,7 +431,7 @@ if __name__ == "__main__":
         print("X: " + str(PlocX) + " ,Y: " + str(PlocY))
         print("_" * 120)
 
-        lbj = cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamitInt, posDinamit)  # Ngecek klo player nge-klik WASD dll..
+        lbj = cekKontrol(PlocY, PlocX, kalah, lazerInt, dinamitInt, posDinamit, musuh)  # Ngecek klo player nge-klik WASD dll..
 
         PlocY = lbj[0]  # Memasukkan var hasil return func cekKontrol ke variabel penting
         PlocX = lbj[1]
@@ -431,6 +439,7 @@ if __name__ == "__main__":
         lazerInt = lbj[3]
         dinamitInt = lbj[4]
         posDinamit = lbj[5]
+        musuh = lbj[6]
 
         # Sistem biar bisa keluar
         # Biasanya digunakan saat game nge-bug, atau keluar kesalahan.
@@ -445,8 +454,7 @@ if __name__ == "__main__":
         PlocXold = a[0]                                   # atur pada function cekKontrol()
         PlocYold = a[1]
 
-        draw() # Draw Map
-
+        draw()  # Draw Map
 
         # Print Sisa listrik dari Int LazerInt          Dan nge-print jumlah dinamit yang dipunya
         print("\nSisa Listrik = " + str(lazerInt) + "%" + " | Dinamit = " + str(dinamitInt))
@@ -496,8 +504,8 @@ if __name__ == "__main__":
             
         time.sleep(0.085)
 
-        # if os.name != "nt": os.system("clear")
-        # else: os.system("cls")
+        if os.name != "nt": os.system("clear")
+        else: os.system("cls")
 
         waktuDetikFPS = int(time.time())   # Menghitung berapa Frame per Detik (FPS)
         if waktuDetikFPS == wdfl + 1:              # Udah kena delay, jadi.. bukan FPS asli..
@@ -506,7 +514,6 @@ if __name__ == "__main__":
             FPScount = 0
         else:
             FPScount += 1
-
 
         # Developer debug things
         if dbg_mode:
