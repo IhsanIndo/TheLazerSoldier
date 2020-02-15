@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-#import keyboard
+import keyboard
 import random
 
 map = dict()
@@ -29,10 +29,6 @@ wdfl = int()
 # -----  End FPS Counter  -----
 
 
-class keyboard:
-    def is_pressed(self):
-        return False
-
 def pickupChecker(posDinamitAmbil, PlocY, PlocX, dinamit, posListrik):
     for a in posDinamitAmbil:
         if [PlocY, PlocX] == a:
@@ -41,7 +37,7 @@ def pickupChecker(posDinamitAmbil, PlocY, PlocX, dinamit, posListrik):
 
     return [posDinamitAmbil, dinamit, posListrik]
 
-'''
+
 def musuhAktif(pM, pP):   # AI Musuh v2
     print(pM)
     # Mirip AI nya Pacman
@@ -49,7 +45,7 @@ def musuhAktif(pM, pP):   # AI Musuh v2
     for posm in pM:
     #if True:
             return posm
-'''
+
 
 class Musuh:
     datas = []
@@ -57,8 +53,8 @@ class Musuh:
     def __init__(self):
         pass
 
-    def add(self, posY, posX): # Y X Yold Xold chaseMode
-        self.datas.append([posY, posX, posY, posX, False])
+    def add(self, posY, posX, posYo, posXo, chsM): # Y X Yold Xold chaseMode
+        self.datas.append([posY, posX, posYo, posXo, chsM])
 
     def kill(self, pos):
         self.datas.remove(pos)
@@ -67,59 +63,21 @@ class Musuh:
         pnum = 0
         for pM in self.datas:
 
-            print(posm)
-            target = []
-            up = []
-            down = []
-            right = []
-            left = []
-            print(posm)
-            if not posm[3] and random.randint(0, 5) == 3:
-                posm[3] = True
-            if posm[3] and random.randint(0, 25) == 14:
-                posm[3] = False
-            if posm[3]:
-            
-                print(posm)
+            # Set random directions for enemy
+            rand = random.randint(0, 4)
+            if rand == 0 and (pM[0]+1) <= 24:
+                pM[0] += 1
+            if rand == 1 and (pM[0]-1) >= 1:
+                pM[0] -= 1
+            if rand == 2 and (pM[1]+1) <= 119:
+                pM[1] += 1
+            if rand == 3 and (pM[1]-1) >= 1:
+                pM[0] -= 1
 
-                i = posm[0]+1
-                up = [i, posm[1]]
+            # set new values into datas
+            self.datas[pnum] = pM
 
-                i = posm[0]-1
-                down = [i, posm[1]]
-
-                i = posm[1]+1
-                right = [posm[0], i]
-
-                i = posm[1]-1
-                left = [posm[0], i]
-                
-                direction = [up, down, right, left]
-
-                preds = [
-                            [abs(up[0] - pP[0]) + abs(up[1] - pP[1]),       0]  ,
-                            [abs(down[0] - pP[0]) + abs(up[1] - pP[1]),     1]  ,
-                            [abs(right[0] - pP[0]) + abs(right[1] - pP[1]), 2]  ,
-                            [abs(left[0] - pP[0]) + abs(left[1] - pP[1]),   3]
-                        ]
-        
-                preds = preds.sort()
-                num = 10
-                for pred in preds:
-                    for a in range(0, 4):
-                        num = a
-                        if view[direction[a][1]][direction[a][0]] != "#":
-                            break
-                    if num != 10:
-                        self.datas[pnum] = [direction[num][0]   ,
-                                            direction[num][0]   ,
-                                            self.datas[2]       ,
-                                            self.datas[3]       ,
-                                            True                ]
-                
-                # Y X Yold Xold chaseMode
-
-                pnum += 1
+            pnum += 1
 
     def bind(self, view):
         num = 0
@@ -132,6 +90,8 @@ class Musuh:
         return view
 
 musuh = Musuh()
+
+
 
 def bindPlayer(x, y, xo, yo):
     map[yo][xo] = " "
@@ -478,8 +438,8 @@ if __name__ == "__main__":
             os.system("cls")
             exit()
 
-        musuh.active() # Buat Musuh bisa bergerak (AI)
-        musuh.bind() # Bind Musuh ke map
+        musuh.active(map)  # Buat Musuh bisa bergerak (AI)
+        musuh.bind(map)  # Bind Musuh ke map
 
         a = bindPlayer(PlocX, PlocY, PlocXold, PlocYold)  # Ngeposisikan Player ke tempat yang sudah di
         PlocXold = a[0]                                   # atur pada function cekKontrol()
@@ -503,10 +463,10 @@ if __name__ == "__main__":
         if kalah:
             break
         
-        if len(posMusuh) == 0:
+        if len(musuh.datas) == 0:
             break
         
-        if [PlocY, PlocX, PlocY, PlocX] in posMusuh:
+        if [PlocY, PlocX, PlocY, PlocX] in musuh.datas:
             kalah = True
             problema = "Kena Musuh"
             break
@@ -551,7 +511,7 @@ if __name__ == "__main__":
         # Developer debug things
         if dbg_mode:
             if dbg_enabled:
-                print("posMusuh: "+ str(posMusuh) + "\nposDinamit: " + str(posDinamit) + "\nposDinamitAmbil: " + str(posDinamitAmbil) + "\nposListrik: " + str(posListrik))
+                print("posMusuh: "+ str(musuh.datas) + "\nposDinamit: " + str(posDinamit) + "\nposDinamitAmbil: " + str(posDinamitAmbil) + "\nposListrik: " + str(posListrik))
 
             if keyboard.is_pressed("x"):
                 dbg_enabled = True
