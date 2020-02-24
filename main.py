@@ -394,24 +394,23 @@ if __name__ == "__main__":
 
     if os.name != "nt": os.system("clear")
     else: os.system("cls")
-
+    
+    # User Inputs
     print("\n\n\n")
     print(" [i] Kemungkinan temboknya Random atau tidak? [i]")
     kemungkinan = input("Random atau tidak? [y/t] ")
     if kemungkinan == "y":
         initialization(random.randint(5, 50))
     elif kemungkinan == "t":
-        print(" [i] min. 2, maks. 70 (Masukkan Nomor) [i]")
+        print("min. 2, maks. 70 (Masukkan Nomor)")
         try:
-            kemungkinan = int(input("Masukkan kemungkinan Tembok = "))
-        except ValueError:
+            kemungkinan = int(input("Masukkan Besar Kepadatan Tembok : "))
+        except ValueError err:
+            print("Bad Value :", err)
             exit()
         else:
             initialization(kemungkinan)
-
-    print(musuh.datas)
-
-    time.sleep(10)
+            
     waktuDetikFPS = int(time.perf_counter())
     while True:
         print(musuh.datas)
@@ -438,8 +437,8 @@ if __name__ == "__main__":
             os.system("cls")
             exit()
 
-        musuh.active(map)  # Buat Musuh bisa bergerak (AI)
-        musuh.bind(map)  # Bind Musuh ke map
+        musuh.active(map)   # Buat Musuh bisa bergerak (AI)
+        musuh.bind(map)     # Bind Musuh ke map
 
         a = bindPlayer(PlocX, PlocY, PlocXold, PlocYold)  # Ngeposisikan Player ke tempat yang sudah di
         PlocXold = a[0]                                   # atur pada function cekKontrol()
@@ -491,7 +490,9 @@ if __name__ == "__main__":
                 map[a[0]][a[1]] = "■"
 
         for a in posDinamit:
-            if not map[a[0]][a[1]] == "│" or map[a[0]][a[1]] == "─" or map[a[0]][a[1]] == "─":
+            if not map[a[0]][a[1]] == "│" or 
+            map[a[0]][a[1]] == "─" or 
+            map[a[0]][a[1]] == "─":
                 map[a[0]][a[1]] = "o"
             
         time.sleep(0.085)
