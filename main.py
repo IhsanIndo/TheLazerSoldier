@@ -420,7 +420,6 @@ if __name__ == "__main__":
         else:
             initialization(kemungkinan)
 
-
     waktuDetikFPS = int(time.perf_counter())
     while True:
 
@@ -501,14 +500,12 @@ if __name__ == "__main__":
         for a in posDinamit:
             if not map[a[0]][a[1]] == "│" or map[a[0]][a[1]] == "─" or map[a[0]][a[1]] == "─":
                 map[a[0]][a[1]] = "o"
-            
-        time.sleep(0.085)
 
         if os.name != "nt": os.system("clear")
         else: os.system("cls")
 
-        waktuDetikFPS = int(time.time())   # Menghitung berapa Frame per Detik (FPS)
-        if waktuDetikFPS == wdfl + 1:              # Udah kena delay, jadi.. bukan FPS asli..
+        waktuDetikFPS = int(time.perf_counter())   # Menghitung berapa Frame per Detik (FPS)
+        if waktuDetikFPS == wdfl + 1:      # Udah kena delay, jadi.. bukan FPS asli..
             wdfl = waktuDetikFPS
             FPS = FPScount
             FPScount = 0

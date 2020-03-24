@@ -258,7 +258,7 @@ if __name__ == "__main__":
             exit()
         else:
             initialization(kemungkinan)
-    waktuDetikFPS = int(time.perf_counter())
+    waktuDetikFPS = int(time.time())
     while True:
 
         print("\n                                                   The Lazer Soldier\n" +
@@ -312,7 +312,7 @@ if __name__ == "__main__":
 
         os.system("cls")
 
-        waktuDetikFPS = int(time.perf_counter())   # Menghitung berapa Frame per Detik (FPS)
+        waktuDetikFPS = int(time.time())   # Menghitung berapa Frame per Detik (FPS)
         if waktuDetikFPS == wdfl + 1:              # Udah kena delay, jadi.. bukan FPS asli..
             wdfl = waktuDetikFPS
             FPS = FPScount
